@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyNest 11</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#f4efe4;color:#263d31;
+ font-family:Georgia,serif;
+}
+header{
+ padding:22px 18px;background:#294b3b;color:#fff;
+ border-radius:0 0 25px 25px;
+}
+.brand{font-size:25px;font-weight:bold}
+.by{font-size:11px;letter-spacing:2px;margin-top:4px}
+main{padding:20px;max-width:650px;margin:auto}
+h1{font-size:27px;line-height:1.3}
+.sub{color:#788477;font:13px Arial}
+.search{
+ width:100%;padding:14px;border:1px solid #ddd;
+ border-radius:12px;background:white;font-size:15px;
+}
+.card{
+ background:white;padding:19px;margin:13px 0;
+ border-radius:17px;border:1px solid #e8e1d3;
+ cursor:pointer;box-shadow:0 4px 13px #263d3110;
+}
+.card h3{margin:5px 0 8px}
+.card p{color:#788477;font:13px Arial;margin:0}
+.icon{font-size:27px}
+button{
+ background:#294b3b;color:white;border:0;
+ padding:13px 18px;border-radius:10px;
+ cursor:pointer;font-size:14px;
+}
+.back{background:#dedfd2;color:#294b3b;margin-bottom:15px}
+.hidden{display:none}
+footer{text-align:center;padding:25px;color:#8b907f;font:12px Arial}
+.chapter{display:flex;justify-content:space-between;align-items:center}
+#popup{
+ position:fixed;inset:0;background:#14251dcc;
+ display:none;align-items:center;justify-content:center;
+ padding:20px;
+}
+.modal{
+ background:#fffaf0;padding:25px;border-radius:22px;
+ width:100%;max-width:360px;text-align:center;
+}
+.modal h2{color:#294b3b}
+.insta{background:#9b4c83;width:100%;margin:12px 0}
+.close{background:#e4e0d7;color:#294b3b;width:100%}
+nav{
+ position:sticky;bottom:0;background:#fffaf0;
+ display:flex;justify-content:space-around;padding:13px;
+ border-top:1px solid #ddd;
+}
+nav button{background:transparent;color:#294b3b;padding:8px}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">StudyNest 11</div>
+ <div class="by">BY YUGANT</div>
+</header>
+
+<main>
+<section id="home">
+ <p class="sub">MP BOARD • CLASS 11</p>
+ <h1>अपनी पढ़ाई को दें एक नई दिशा।</h1>
+ <p class="sub">आपकी डिजिटल हैंडरिटन नोट्स लाइब्रेरी।</p>
+ <input class="search" id="search"
+ placeholder="Subject खोजें..." oninput="findSubjects()">
+ <div id="subjects">
+  <div class="card" data-name="physics" onclick="openSubject('Physics')">
+   <span class="icon">⚛️</span>
+   <h3>Physics</h3><p>भौतिक विज्ञान</p>
+  </div>
+  <div class="card" data-name="chemistry" onclick="openSubject('Chemistry')">
+   <span class="icon">⚗️</span>
+   <h3>Chemistry</h3><p>रसायन विज्ञान</p>
+  </div>
+  <div class="card" data-name="biology" onclick="openSubject('Biology')">
+   <span class="icon">🧬</span>
+   <h3>Biology</h3><p>जीव विज्ञान</p>
+  </div>
+ </div>
+</section>
+
+<section id="subject" class="hidden">
+ <button class="back" onclick="goHome()">← Home</button>
+ <h1 id="subjectTitle"></h1>
+ <p class="sub">MP Board • Class 11 • 10 Chapters</p>
+ <div id="chapters"></div>
+</section>
+
+<section id="notes" class="hidden">
+ <button class="back" onclick="goSubject()">← Chapters</button>
+ <h1 id="chapterTitle"></h1>
+ <div class="card">
+  <span class="icon">📒</span>
+  <h3>Handwritten Notes</h3>
+  <p>इस Chapter के Notes जल्द उपलब्ध होंगे।</p>
+ </div>
+ <button onclick="showPopup()">PDF Download</button>
+</section>
+
+<section id="about" class="hidden">
+ <h1>About StudyNest 11</h1>
+ <p>Class 11 MP Board की हिंदी Handwritten Notes Library.</p>
+ <p>Instagram: @yugant_yt__</p>
+ <button onclick="instagram()">Instagram Profile</button>
+</section>
+</main>
+
+<nav>
+ <button onclick="goHome()">⌂ Home</button>
+ <button onclick="goHome()">▦ Subjects</button>
+ <button onclick="goAbout()">ⓘ About</button>
+</nav>
+
+<div id="popup">
+ <div class="modal">
+  <div style="font-size:35px">📸</div>
+  <h2>Unlock Your Notes!</h2>
+  <p>PDF Access के लिए हमारे Instagram पेज पर जाएं।</p>
+  <b>@yugant_yt__</b>
+  <button class="insta" onclick="instagram()">Follow on Instagram ↗</button>
+  <button class="close" onclick="closePopup()">वापस जाएं</button>
+ </div>
+</div>
+
+<footer>StudyNest 11 • BY YUGANT</footer>
+
+<script>
+let currentSubject="";
+
+function hideAll(){
+ ["home","subject","notes","about"].forEach(id=>
+ document.getElementById(id).classList.add("hidden"));
+}
+function goHome(){
+ hideAll();
+ document.getElementById("home").classList.remove("hidden");
+}
+function openSubject(name){
+ currentSubject=name;
+ hideAll();
+ document.getElementById("subject").classList.remove("hidden");
+ document.getElementById("subjectTitle").innerText=name;
+ let html="";
+ for(let i=1;i<=10;i++){
+ html+=`<div class="card chapter" onclick="openNotes(${i})">
+ <span>📖 Chapter ${i}</span><span>→</span></div>`;
+ }
+ document.getElementById("chapters").innerHTML=html;
+}
+function goSubject(){
+ openSubject(currentSubject);
+}
+function openNotes(n){
+ hideAll();
+ document.getElementById("notes").classList.remove("hidden");
+ document.getElementById("chapterTitle").innerText=
+ currentSubject+" • Chapter "+n;
+}
+function goAbout(){
+ hideAll();
+ document.getElementById("about").classList.remove("hidden");
+}
+function findSubjects(){
+ let q=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll("#subjects .card").forEach(card=>{
+ card.style.display=card.dataset.name.includes(q)?"block":"none";
+ });
+}
+function showPopup(){
+ document.getElementById("popup").style.display="flex";
+}
+function closePopup(){
+ document.getElementById("popup").style.display="none";
+}
+function instagram(){
+ window.open("https://www.instagram.com/yugant_yt__/","_blank");
+}
+</script>
+</body>
+</html>
