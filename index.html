@@ -161,11 +161,28 @@ function openSubject(name){
 function goSubject(){
  openSubject(currentSubject);
 }
-function openNotes(n){
- hideAll();
- document.getElementById("notes").classList.remove("hidden");
- document.getElementById("chapterTitle").innerText=
+document.getElementById("chapterTitle").innerText =
  currentSubject+" • Chapter "+n;
+
+ // Purana PDF button hatana
+ let oldButton = document.getElementById("pdfDownloadButton");
+ if(oldButton) oldButton.remove();
+
+ // Sirf Physics Chapter 1 ke liye PDF button
+ if(currentSubject === "Physics" && n === 1){
+
+   let btn = document.createElement("a");
+
+   btn.id = "pdfDownloadButton";
+   btn.href = "https://drive.google.com/file/d/1ih7bwq5vcXK1mImXze_ejEq6fTJ9U4YY/view?usp=drive_link";
+   btn.target = "_blank";
+   btn.rel = "noopener";
+   btn.innerText = "Hand written notes PDF dounload";
+   btn.className = "btn";
+
+   document.getElementById("notes").appendChild(btn);
+ }
+}
 }
 function goAbout(){
  hideAll();
